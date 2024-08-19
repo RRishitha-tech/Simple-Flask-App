@@ -1,0 +1,32 @@
+RG="AZURE-RG"
+
+az group create --location canadacentral -n ${RG}
+
+#vNET
+az network vnet create -g ${RG} -n ${RG}-vNET1 --address-prefix 10.32.0.0/16 \
+--subnet-name ${RG}-Subnet-1 --subnet-prefix 10.32.1.0/24 -l canadacentral
+
+az network vnet subnet create -g ${RG} --vnet-name ${RG}-vNET1 -n ${RG}-Subnet-2 --address-prefixes 10.32.2.0/24
+
+az network vnet subnet create -g ${RG} --vnet-name ${RG}-vNET1 -n ${RG}-Subnet-3 --address-prefixes 10.32.3.0/24
+
+az network nsg create -g ${RG} -n ${RG}-NSG1
+
+#NSG-RULE
+az network nsg rule create -g ${RG} --nsg-name ${RG}-NSG1 -n ${RG}-NSG1-RULE-1 --priority 100 \
+--source-address-prefix '*' --source-port-ranges '*' --destination-address-prefixes '*' \
+--destination-port-ranges '*' --access Allow --protocol Tcp --description "Allowing All Traffic"
+
+image="Canonical:0001-com-ubuntu-server-focal:20_04-lts-gen2:latest"
+
+az vm create --resource-group ${RG} --name WebServer-01  --image $image --vnet-name ${RG}-vNET1 \
+--subnet ${RG}-Subnet-1 --admin-user rishitharepalle --admin-password "Samaira@2021" --size Standard_B1s \
+--nsg ${RG}-NSG1 --storage-sku StandardSSD_LRS --zone 1 --custom-data cloudinit.txt
+
+az vm create --resource-group ${RG} --name WebServer-02  --image $image --vnet-name ${RG}-vNET1 \
+--subnet ${RG}-Subnet-2 --admin-user rishitharepalle --admin-password "Samaira@2021" --size Standard_B1s \
+--nsg ${RG}-NSG1 --storage-sku StandardSSD_LRS --zone 1 --custom-data cloudinit.txt
+
+az vm create --resource-group ${RG} --name WebServer-03  --image $image --vnet-name ${RG}-vNET1 \
+--subnet ${RG}-Subnet-3 --admin-user rishitharepalle --admin-password "Samaira@2021" --size Standard_B1s \
+--nsg ${RG}-NSG1 --storage-sku StandardSSD_LRS --zone 1 --custom-data cloudinit.txt

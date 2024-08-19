@@ -1,0 +1,11 @@
+#!/bin/bash
+sudo apt update
+sudo apt install ansible -y
+sudo apt install nginx -y
+sudo apt install git -y
+sudo apt install stress -y
+
+sudo git clone --branch azure-vmss https://github.com/bkrraj/ansibletemplatetesting.git  /myrepo
+
+
+https://github.com/bkrrajmali/ansibletemplatetesting/blob/azure-vmss/ubuntushellscript

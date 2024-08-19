@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Display File</title>
+</head>
+<body>
+    <h1>Uploaded File</h1>
+
+    {% if file_type == 'image' %}
+        <img src="{{ url_for('uploaded_file', filename=filename) }}" alt="Uploaded Image">
+    {% elif file_type == 'pdf' %}
+        <embed src="{{ url_for('uploaded_file', filename=filename) }}" type="application/pdf" width="600" height="500">
+    {% elif file_type == 'text' %}
+        <pre>{{ content }}</pre>
+    {% endif %}
+    
+    <p><a href="{{ url_for('upload_file') }}">Upload another file</a></p>
+</body>
+</html>
