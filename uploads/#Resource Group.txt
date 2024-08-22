@@ -1,0 +1,30 @@
+#Resource Group
+
+RG="AZURE-RG"
+
+az group create --location eastus -n ${RG}
+
+#vNET
+
+az network vnet create -g ${RG} -n ${RG}-vNET1 --address-prefix 10.32.0.0/16 \
+--subnet-name WEBSUBNET --subnet-prefix 10.32.1.0/24 -l eastus
+
+#NSG
+
+az network nsg create -g ${RG} -n ${RG}-NSG1
+
+#NSG-RULE
+
+az network nsg rule create -g ${RG} --nsg-name ${RG}-NSG1 -n ${RG}-NSG1-RULE-1 --priority 100 \
+--source-address-prefix '*' --source-port-ranges '*' --destination-address-prefixes '*' \
+--destination-port-ranges '*'
+
+#Creating image which means OS
+
+image="Canonical:0001-com-ubuntu-server-focal:20_04-lts-gen2:latest"
+
+#Creating VM in azure
+
+az vm create --resource-group ${RG} --name LINUXVM  --image $image --vnet-name ${RG}-vNET1 \
+--subnet WEBSUBNET --admin-user rishitharepalle --admin-password "Samaira@2021" --size Standard_B1s \
+--nsg ${RG}-NSG1 --storage-sku StandardSSD_LRS --private-ip-address 10.32.1.10

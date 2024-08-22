@@ -3,19 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Display File</title>
+    <title>File Upload</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f4f4f4;
+            font-family: Arial, sans-serif;
+        }
+        .message {
+            text-align: center;
+            padding: 20px;
+            background-color: #e0e0e0;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
 </head>
 <body>
-    <h1>Uploaded File</h1>
-
-    {% if file_type == 'image' %}
-        <img src="{{ url_for('uploaded_file', filename=filename) }}" alt="Uploaded Image">
-    {% elif file_type == 'pdf' %}
-        <embed src="{{ url_for('uploaded_file', filename=filename) }}" type="application/pdf" width="600" height="500">
-    {% elif file_type == 'text' %}
-        <pre>{{ content }}</pre>
-    {% endif %}
-    
-    <p><a href="{{ url_for('upload_file') }}">Upload another file</a></p>
+    <div class="message">
+        <h2>File Uploaded Successfully!</h2>
+    </div>
 </body>
 </html>
+

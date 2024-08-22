@@ -9,7 +9,7 @@ UPLOAD_FOLDER = 'uploads'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'txt', 'pdf'}
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-sas_url = "https://project3webapp.blob.core.windows.net/blob?sp=racwdli&st=2024-08-19T21:52:02Z&se=2024-08-20T05:52:02Z&sv=2022-11-02&sr=c&sig=RExUI2WXTMZct%2Bviqy35R1G%2FgMFPy1jCObo%2BunLPwF8%3D"
+sas_url = "https://project3webapp.blob.core.windows.net/blob?sp=racwdli&st=2024-08-22T00:48:32Z&se=2024-08-29T08:48:32Z&sv=2022-11-02&sr=c&sig=rnt7qeZ2WX9bO3vSbJ52WMBrAebXTP7IPBSGIxo5IVo%3D"
 blob_service_client = BlobServiceClient(account_url=sas_url)
 
 # Ensure the upload folder exists

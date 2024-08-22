@@ -1,0 +1,99 @@
+Task #1: Enable Site Collection App Catalog using PowerShell
+
+
+$baseUrl = "https://7gh51n.sharepoint.com"
+$siteOwner = "rishitharepalle@7gh51n.onmicrosoft.com"
+
+Function Create-SPOSite 
+{
+  param
+    (
+        [string]$siteTitle  = $(throw "Please Provide the Site Title!"),
+		[string]$template = $(throw "Please Provide the Site Template!"),
+		[string]$owner = $(throw "Please Provide the Site Owner!")
+    )
+ 
+
+Try{
+   $siteUrl = $baseUrl+"/sites/"+$siteTitle
+   
+    New-SPOSite -Url $siteUrl -owner $siteOwner -StorageQuota 1000 -CompatibilityLevel 15 -LocaleID 1033 -ResourceQuota 300 -Template $template -TimeZoneId 13 -title $siteTitle
+	
+	write-host "Site created with url:" $siteUrl
+}
+catch {
+    write-host "Error: $($_.Exception.Message)" -foregroundcolor Red
+    }
+Finally{}
+
+}
+Import-Csv "C:\Users\rishi\Downloads\sites list.csv"| Foreach-Object {
+   Create-SPOSite -siteTitle $_.siteTitle -template $_.Template -owner $siteOwner  }
+
+
+2nd option from google
+
+https://www.sharepointdiary.com/2017/09/sharepoint-online-create-multiple-site-collections-in-bulk-from-csv-file-using-powershell.html#:~:text=How%20do%20I%20bulk%20create%20sites%20using%20PowerShell,site%20properties%2C%20permissions%2C%20and%20other%20settings%20as%20needed.
+
+
+
+Task #2: Delete a site collection using PowerShell
+
+Remove-SPOSite -identity https://7gh51n.sharepoint.com/sites/5F or put -NoWait after site name then execute.
+
+permanently deleting a deleted site" 
+
+Remove-SPODeletedSite -identity https://7gh51n.sharepoint.com/sites/5F
+
+
+
+Task #3: Create columns using a CSV file
+
+connect-PnPOnline -Url https://7gh51n.sharepoint.com -interactive
+
+Import-Csv "C:\Users\rishi\Downloads\columns list.csv" | Foreach-Object {
+Add-PnPField -Type $_.Type -DisplayName $_.Title -InternalName $_.InternalName }
+ 
+ 
+Add-PnPContentType -Name "Project Plan" -ParentContentType (Get-PnPContentType -Identity Document)
+Add-PnPContentType -Name "Job Description" -ParentContentType (Get-PnPContentType -Identity Document)
+
+Import-Csv "C:\Users\rishi\Downloads\columns list.csv" | Foreach-Object {
+Add-PnPFieldToContentType -Field $_.InternalName -ContentType "Job Description“
+}
+
+
+
+Task #5:
+
+$SiteURL = "https://7gh51n.sharepoint.com/sites/1F"
+$PageName ="Exam.aspx"
+
+try {
+
+    Connect-PnPOnline -Url $SiteURL -Interactive
+    $Page = Get-PnPClientSidePage -Identity $PageName
+	Add-PnPPageWebPart  -Page $Page -DefaultWebPartType Image -WebPartProperties @{
+        imageSourceType = 2
+        title = "Image Title"
+    }
+
+$Page.Save()
+    
+Write-Host "Image Web Part has been added to the page successfully!" -ForegroundColor Green
+}
+catch {
+ Write-Host "Error: $($Error[0].Exception.Message)" -ForegroundColor Red
+}
+
+
+
+
+#Read more: https://www.sharepointdiary.com/2021/03/add-web-part-to-modern-page-in-sharepoint-online-using-powershell.html#ixzz8XhGzlDne
+
+
+#Read more: https://www.sharepointdiary.com/2019/12/create-communication-site-in-sharepoint-online-using-powershell.html#ixzz8XhPw2VVy
+
+
+
+
